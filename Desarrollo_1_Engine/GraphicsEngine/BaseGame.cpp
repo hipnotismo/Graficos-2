@@ -43,6 +43,7 @@ int BaseGame::WindowInit(int width, int height, const char* title)// GLFWmonitor
 }
 void BaseGame::RendererInit()
 {
+
 	renderer->CreateBuffers();
 	renderer->BindBuffers();
 
@@ -53,6 +54,9 @@ void BaseGame::RendererInit()
 	renderer->DefVertexSpriteAttribute();
 
 	renderer->CallUniformShaders();
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+
 }
 bool BaseGame::Running()
 {
@@ -61,8 +65,14 @@ bool BaseGame::Running()
 
 void BaseGame::UpdateBegin()
 {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	window->ClearBackground();
 	UpdateDeltaTime();
+}
+
+void BaseGame::CameraFollowObj(CameraType type, glm::vec3 objPosReference, float distanceFromReferene)
+{
+	renderer->GetCamera()->CameraFollowObj(type, objPosReference, distanceFromReferene);
 }
 
 void BaseGame::UpdateEnd()
@@ -84,16 +94,33 @@ void BaseGame::UpdateEngine()
 	EngineEnd();
 }
 
-void BaseGame::CameraMove(float x, float y, float z)
-{
-	renderer->CameraMove(x, y, z);
-}
-
 bool BaseGame::GetKey(int keycode)
 {
 	//return input->GetKey(GLFW_KEY_A, window->GetWindow());
 	//return input->GetKey(KEYCODE_A, window->GetWindow());
 	return input->GetKey(keycode, window->GetWindow());
+}
+
+void BaseGame::SetCameraPosition(float x, float y, float z)
+{
+	renderer->GetCamera()->SetCameraPosition(x, y, z);
+}
+
+void BaseGame::CameraMove(CameraDirection direction, float speed)
+{
+	renderer->GetCamera()->CameraMove(direction, speed, DeltaTime());
+}
+void BaseGame::CameraRotate(float speedX, float speedY)
+{
+	renderer->GetCamera()->CameraRotate(speedX, speedY);
+}
+void BaseGame::SetCameraProjection(CameraProjection selection)
+{
+	renderer->GetCamera()->cameraProjection = selection;
+}
+CameraProjection BaseGame::GetCameraProjection()
+{
+	return renderer->GetCamera()->cameraProjection;
 }
 
 void BaseGame::EngineEnd()

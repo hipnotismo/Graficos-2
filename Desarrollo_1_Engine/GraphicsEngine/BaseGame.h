@@ -34,9 +34,14 @@ public:
 	void virtual Start() = 0;
 	void virtual Delete() = 0;
 
-	void CameraMove(float x, float y, float z);
-
 	bool GetKey(int keycode);
+
+	void SetCameraPosition(float x, float y, float z);
+	void CameraMove(CameraDirection direction, float speed);
+	void CameraRotate(float speedX, float speedY);
+	void SetCameraProjection(CameraProjection selection);
+	CameraProjection GetCameraProjection();
+	void CameraFollowObj(CameraType type, glm::vec3 objPosReference, float distanceFromReferene);
 
 };
 #endif

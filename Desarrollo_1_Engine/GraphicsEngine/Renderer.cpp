@@ -10,14 +10,26 @@ Renderer* Renderer::myRef;
 
 Renderer::Renderer()
 {
+	modelLoc = 0;
+	projectLoc = 0;
+	viewLoc = 0;
+	cam = new Camera();
 
+}
+
+Renderer::~Renderer()
+{
+	
+	if (cam) delete cam;
 }
 
 void Renderer::Draw(float* vertex, int vertexLength, unsigned int* index, int indexLength, glm::mat4 modelMatrix)
 {
 	UpdateModelUniformShaders(modelMatrix);
-	UpdateProjectUniformShaders(projection);
-	UpdateViewUniformShaders(view);
+	UpdateProjectUniformShaders(cam->projection);
+	UpdateViewUniformShaders(cam->view);
+	/*UpdateProjectUniformShaders(projection);
+	UpdateViewUniformShaders(view);*/
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexLength, vertex, GL_STATIC_DRAW); //set info to buffer
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * indexLength, index, GL_STATIC_DRAW); //set info to buffer
 	glDrawElements(GL_TRIANGLES, indexLength, GL_UNSIGNED_INT, 0);
@@ -36,8 +48,10 @@ void Renderer::SpriteDraw(float* vertex, int vertexLength, unsigned int* index, 
 		glDisable(GL_BLEND);
 	}
 	UpdateModelUniformShaders(modelMatrix);
-	UpdateProjectUniformShaders(projection);
-	UpdateViewUniformShaders(view);
+	UpdateProjectUniformShaders(cam->projection);
+	UpdateViewUniformShaders(cam->view);
+	/*UpdateProjectUniformShaders(projection);
+	UpdateViewUniformShaders(view);*/
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexLength, vertex, GL_STATIC_DRAW); //set info to buffer
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * indexLength, index, GL_STATIC_DRAW); //set info to buffer
 	glDrawElements(GL_TRIANGLES, indexLength, GL_UNSIGNED_INT, 0);
@@ -95,44 +109,38 @@ void Renderer::UpdateModelUniformShaders(glm::mat4 modelMatrix)
 
 void Renderer::UpdateProjectUniformShaders(glm::mat4 projectMatrix)
 {
-	UpdateProjection();
+	//UpdateProjection();
+	cam->UpdateProjection();
 	glUniformMatrix4fv(projectLoc, 1, GL_FALSE, glm::value_ptr(projectMatrix)); //update project in the shader
 
 }
-void Renderer::UpdateProjection()
-{
-	//x left, x right, y down, y up, near, far
-	//projection = glm::ortho(-2.0f, +2.0f, -1.5f, +1.5f, 0.1f, 100.0f);
-	projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
-	//x left, x right, y down, y up, z back, z front
-	//projection = glm::ortho(0.0f, 1280.0f, 0.0f, 720.0f);// , 1.0f, -1.0f);
-}
 void Renderer::UpdateViewUniformShaders(glm::mat4 viewMatrix)
 {
-	UpdateView();
+	//UpdateView();
+	cam->UpdateView();
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(viewMatrix)); //update view in the shader
 
 
 }
-void Renderer::UpdateView()
-{
-	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-}
-void Renderer::CameraMove(float x, float y, float z)
-{
-	cameraPos.x = x;
-	cameraPos.y = y;
-	cameraPos.z = z;
-	//w
-	//cameraPos += cameraSpeed * cameraFront;
-	//s
-	//cameraPos -= cameraSpeed * cameraFront;
-	//a
-	//cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	//d
-	//cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-}
+//void Renderer::UpdateView()
+//{
+//	view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+//}
+//void Renderer::CameraMove(float x, float y, float z)
+//{
+//	cameraPos.x = x;
+//	cameraPos.y = y;
+//	cameraPos.z = z;
+//	//w
+//	//cameraPos += cameraSpeed * cameraFront;
+//	//s
+//	//cameraPos -= cameraSpeed * cameraFront;
+//	//a
+//	//cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+//	//d
+//	//cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+//}
 
 
 void Renderer::SetStaticRenderer(Renderer* newRef)
@@ -197,4 +205,9 @@ void Renderer::CreateProgram(const char* vertexShaderPath, const char* fragmentS
 	glDetachShader(program, fragment);//UnAttach
 	glDeleteShader(vertex); //delete
 	glDeleteShader(fragment); //delete
+}
+
+Camera* Renderer::GetCamera()
+{
+	return cam;
 }

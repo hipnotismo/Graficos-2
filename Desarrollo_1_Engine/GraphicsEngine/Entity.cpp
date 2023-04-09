@@ -21,6 +21,11 @@ void Entity::UpdateModel()
 	model = translate * rotateX * rotateY * rotateZ * scale ;
 
 }
+void Entity::SpecialRotate()
+{
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+}
 
 void Entity::RotateX(float x)
 {
@@ -29,8 +34,6 @@ void Entity::RotateX(float x)
 	axis[0] = 1.0f;
 	axis[1] = 0.0f;
 	axis[2] = 0.0f;
-
-	rotateX = glm::rotate(glm::mat4(1.0f), x, axis);
 
 	rotateX = glm::rotate(glm::mat4(1.0f), x, axis);
 
@@ -111,4 +114,9 @@ float Entity::GetPositionY()
 float Entity::GetPositionZ()
 {
 	return position.z;
+}
+
+glm::vec3 Entity::GetPosition()
+{
+	return position;
 }

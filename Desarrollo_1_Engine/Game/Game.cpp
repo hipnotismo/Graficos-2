@@ -1,5 +1,7 @@
 #include "Game.h"
 
+CameraType cameraState = CameraType::free;
+
 Game::Game()
 {
 	downAnim = nullptr;
@@ -35,10 +37,11 @@ void Game::Start()
 	test = Sprite("Res/Sprites/R.png");
 	link = Sprite("Res/Sprites/link.png");
 
-	test.SetPosition(-0.5f, 0.0f, -1.0f);
+	test.SetPosition(0.05f, 0.0f, 5.0f);
 	test.Scale(1.0f, 1.0f, 1.0f);
+	test.SpecialRotate();
 
-	padoru.SetPosition(-0.5f, 0.0f, -1.0f);
+	padoru.SetPosition(-1.05f, 0.0f, -1.0f);
 	padoru.Scale(1.0f, 1.0f, 1.0f);
 
 	padoru.canCollision = true;
@@ -71,6 +74,8 @@ float a = 1.0f;
 float cameraX = 0.1f;
 float cameraY = 0.1f;
 float cameraZ = 0.1f;
+float cameraSpeedRotateX = 0.7f;
+float cameraSpeedRotateY = 0.7f;
 
 const float valueModif = 0.01f;
 
@@ -83,73 +88,98 @@ void Game::Update()
 	//shape.SetPosition(-1 + a, 0, 0);
 	//squareAuto.Draw();*/
 
-	CameraMove(cameraX, cameraY, cameraZ);
-
 	//squareAuto.Rotate(0.0f, 0.0f, 0.0f + a);
 
 	//squareAuto.Draw();
 	//shape.Draw();
 
-	Input(KEYCODE_Z, cameraX, -valueModif);
-	Input(KEYCODE_X, cameraY, -valueModif);
-	Input(KEYCODE_C, cameraZ, -valueModif);
+	if (GetKey(KEYCODE_X)) {
+		padoru.Rotate(0.0f, 0.0f, 500.0f);
 
-	Input(KEYCODE_V, cameraX, valueModif);
-	Input(KEYCODE_B, cameraY, valueModif);
-	Input(KEYCODE_N, cameraZ, valueModif);
+	}
 
-	Input(KEYCODE_1, testX, valueModif);
-
-	link.Rotate(0, 0, a);
+	if (GetKey(KEYCODE_W))
+		CameraMove(CameraDirection::front, 10.0f);
+	if (GetKey(KEYCODE_S))
+		CameraMove(CameraDirection::back, 10.0f);
 
 	if (GetKey(KEYCODE_A))
+		CameraMove(CameraDirection::left, 10.0f);
+	if (GetKey(KEYCODE_D))
+		CameraMove(CameraDirection::right, 10.0f);
+
+	if (GetKey(KEYCODE_Q))
+		CameraMove(CameraDirection::up, 10.0f);
+	if (GetKey(KEYCODE_E))
+		CameraMove(CameraDirection::down, 10.0f);
+
+
+	if (GetKey(KEYCODE_I))
+		CameraRotate(cameraSpeedRotateX, 0);
+	if (GetKey(KEYCODE_J))
+		CameraRotate(0, cameraSpeedRotateY);
+	if (GetKey(KEYCODE_K))
+		CameraRotate(-cameraSpeedRotateX, 0);
+	if (GetKey(KEYCODE_L))
+		CameraRotate(0, -cameraSpeedRotateY);
+
+	//Input(KEYCODE_1, testX, valueModif);
+
+	//link.Rotate(0, 0, a);
+
+	if (GetKey(KEYCODE_2))
 	{
 		linkState = Sleft;
 		link.SetAnimation(leftAnim);
-		link.SetPosition(link.GetPositionX() - 0.001f, link.GetPositionY(), link.GetPositionZ());
+		link.SetPosition(link.GetPositionX() - 0.01f, link.GetPositionY(), link.GetPositionZ());
 	}
 	else if (linkState == Sleft)
 	{
 		link.SetAnimation(idleLeftAnim);
 	}
-	if (GetKey(KEYCODE_D))
+	if (GetKey(KEYCODE_3))
 	{
 		linkState = Sright;
 		link.SetAnimation(rightAnim);
-		link.SetPosition(link.GetPositionX() + 0.001f, link.GetPositionY(), link.GetPositionZ());
+		link.SetPosition(link.GetPositionX() + 0.01f, link.GetPositionY(), link.GetPositionZ());
 	}
 	else if (linkState == Sright)
 	{
 		link.SetAnimation(idleRightAnim);
 	}
-	if (GetKey(KEYCODE_W))
+	if (GetKey(KEYCODE_4))
 	{
 		linkState = Sup;
 		link.SetAnimation(upAnim);
-		link.SetPosition(link.GetPositionX(), link.GetPositionY() + 0.001f, link.GetPositionZ());
+		link.SetPosition(link.GetPositionX(), link.GetPositionY() + 0.01f, link.GetPositionZ());
 	}
 	else if (linkState == Sup)
 	{
 		link.SetAnimation(idleUpAnim);
 	}
-	if (GetKey(KEYCODE_S))
+	if (GetKey(KEYCODE_5))
 	{
 		linkState = Sdown;
 		link.SetAnimation(downAnim);
-		link.SetPosition(link.GetPositionX(), link.GetPositionY() - 0.001f, link.GetPositionZ());
+		link.SetPosition(link.GetPositionX(), link.GetPositionY() - 0.01f, link.GetPositionZ());
 	}
 	else if (linkState == Sdown)
 	{
 		link.SetAnimation(idleDownAnim);
 	}
 
-	test.SetPosition(testX, 0.0f, -1.0f);
 
 	//link.Rotate(0, 0, a);
 	test.Draw();
 	padoru.Draw();
 	link.CheckCollisionAABB(padoru);
 	link.Update();
+
+	if (GetKey(KEYCODE_6)) cameraState = CameraType::free;
+	if (GetKey(KEYCODE_7)) cameraState = CameraType::FirstPerson;
+	if (GetKey(KEYCODE_8)) cameraState = CameraType::ThridPerson;
+	CameraFollowObj(cameraState, link.GetPosition(), 5);
+
 	link.Draw();
 
 }

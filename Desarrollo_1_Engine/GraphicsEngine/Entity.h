@@ -44,9 +44,10 @@ public:
 	float GetPositionX();
 	float GetPositionY();
 	float GetPositionZ();
+	void SpecialRotate();
+
+	glm::vec3 GetPosition();
 
 };
-
-
 
 #endif
