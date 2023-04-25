@@ -47,13 +47,16 @@ void BaseGame::RendererInit()
 	renderer->CreateBuffers();
 	renderer->BindBuffers();
 
-	/*renderer->CreateProgram("Res/Shaders/VertexShader.shader", "Res/Shaders/FragmentShader.shader");
-	renderer->DefVertexAttribute();*/
+	///*renderer->CreateProgram("Res/Shaders/VertexShader.shader", "Res/Shaders/FragmentShader.shader");
+	//renderer->DefVertexAttribute();*/
 
-	renderer->CreateProgram("Res/Shaders/SpriteVertexShader.shader", "Res/Shaders/SpriteFragmentShader.shader");
-	renderer->DefVertexSpriteAttribute();
+	//renderer->CreateProgram("Res/Shaders/SpriteVertexShader.shader", "Res/Shaders/SpriteFragmentShader.shader");
+	//renderer->DefVertexSpriteAttribute();
 
-	renderer->CallUniformShaders();
+	//renderer->CallUniformShaders();
+	renderer->CreateShaders();
+	renderer->DefVertexAttribute();
+
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
