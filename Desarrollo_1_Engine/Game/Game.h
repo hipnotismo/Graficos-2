@@ -9,6 +9,7 @@ private:
 	Sprite padoru;
 	Sprite test;
 	Sprite link;
+	Material2D mat1;
 
 	void Update();
 	bool Input(int keycode, float& variable, float modif);

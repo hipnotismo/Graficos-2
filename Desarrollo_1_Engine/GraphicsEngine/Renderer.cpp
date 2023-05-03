@@ -13,6 +13,7 @@ Renderer::Renderer()
 	modelLoc = 0;
 	projectLoc = 0;
 	viewLoc = 0;
+	lightLoc = 0;
 	cam = new Camera();
 	pixelShader = nullptr;
 	textureShader = nullptr;
@@ -22,6 +23,7 @@ Renderer::~Renderer()
 {
 	if (cam) delete cam;
 	if (pixelShader) delete pixelShader;
+	if (materialShader) delete materialShader;
 	if (textureShader) delete textureShader;
 }
 
@@ -31,6 +33,8 @@ void Renderer::CreateShaders()
 	pixelShader->CreateProgram("Res/Shaders/VertexShader.shader", "Res/Shaders/FragmentShader.shader");
 	textureShader = new Shader();
 	textureShader->CreateProgram("Res/Shaders/SpriteVertexShader.shader", "Res/Shaders/SpriteFragmentShader.shader");
+	materialShader = new Shader();
+	materialShader->CreateProgram("Res/Shaders/MaterialVertexShader.shader", "Res/Shaders/MaterialFragmentShader.shader");
 	CallUniformShaders(textureShader);
 }
 
@@ -55,6 +59,8 @@ void Renderer::SpriteDraw(float* vertex, int vertexLength, unsigned int* index, 
 	DefVertexSpriteAttribute();
 	CallUniformShaders(textureShader);
 	textureShader->ActiveProgram();
+	DrawLight(textureShader);
+
 	if (alpha)
 	{
 		glEnable(GL_BLEND);
@@ -70,6 +76,31 @@ void Renderer::SpriteDraw(float* vertex, int vertexLength, unsigned int* index, 
 	UpdateViewUniformShaders(cam->view);
 	/*UpdateProjectUniformShaders(projection);
 	UpdateViewUniformShaders(view);*/
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexLength, vertex, GL_STATIC_DRAW); //set info to buffer
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * indexLength, index, GL_STATIC_DRAW); //set info to buffer
+	glDrawElements(GL_TRIANGLES, indexLength, GL_UNSIGNED_INT, 0);
+}
+
+void Renderer::MaterialDraw(float* vertex, int vertexLength, unsigned int* index, int indexLength, glm::mat4 modelMatrix, bool alpha)
+{
+	DefVertexMaterialAttribute();
+	CallUniformShaders(materialShader);
+	materialShader->ActiveProgram();
+	DrawLight(textureShader);
+
+	if (alpha) // TODO: clean pls
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	else
+	{
+
+		glDisable(GL_BLEND);
+	}
+	UpdateModelUniformShaders(modelMatrix);
+	UpdateProjectUniformShaders(cam->projection);
+	UpdateViewUniformShaders(cam->view);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertexLength, vertex, GL_STATIC_DRAW); //set info to buffer
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * indexLength, index, GL_STATIC_DRAW); //set info to buffer
 	glDrawElements(GL_TRIANGLES, indexLength, GL_UNSIGNED_INT, 0);
@@ -110,6 +141,19 @@ void Renderer::DefVertexSpriteAttribute()
 	glEnableVertexAttribArray(1);
 	// texture coord attribute
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
+	glEnableVertexAttribArray(2);
+}
+
+void Renderer::DefVertexMaterialAttribute()
+{
+	// position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+	// normal attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	// texture coord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 }
 
@@ -173,4 +217,10 @@ Renderer* Renderer::GetStaticRenderer()
 Camera* Renderer::GetCamera()
 {
 	return cam;
+}
+
+void Renderer::DrawLight(Shader* shader)
+{
+	glUniform3fv(glGetUniformLocation(shader->GetProgram(), "ambient.color"), 1, &Light::ambient[0]);
+	glUniform1f(glGetUniformLocation(shader->GetProgram(), "ambient.str"), Light::ambientStrength);
 }

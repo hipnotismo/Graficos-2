@@ -155,6 +155,8 @@
     <ClCompile Include="Entity2D.cpp" />
     <ClCompile Include="Frame.cpp" />
     <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Light.cpp" />
+    <ClCompile Include="Material2D.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Shape.cpp" />
@@ -173,6 +175,8 @@
     <ClInclude Include="Frame.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Keycode.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="Material2D.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Shape.h" />
@@ -187,6 +191,8 @@
     <None Include="..\Res\Shaders\SpriteFragmentShader.shader" />
     <None Include="..\Res\Shaders\SpriteVertexShader.shader" />
     <None Include="..\Res\Shaders\VertexShader.shader" />
+    <None Include="MaterialFragmentShader.shader" />
+    <None Include="MaterialVertexShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

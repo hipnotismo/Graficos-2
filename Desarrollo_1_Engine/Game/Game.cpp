@@ -31,8 +31,15 @@ State linkState = Sdown;
 
 void Game::Start()
 {
+	Light::SetAmbientLight(1.0, 1.0, 1.0);
+	Light::SetAmbientSrength(1.0);
+
 	/*shape.SetPosition(1.0f, 0.0f, 0.0f);
 	squareAuto.SetPosition(1.0f, 0.0f, 0.0f);*/
+	mat1 = Material2D("Res/Sprites/padoru.png");
+	mat1.SetPosition(0.0f, 1.0f, 2.0f);
+	mat1.Scale(1.0f, 1.0f, 1.0f);
+
 	padoru = Sprite("Res/Sprites/padoru.png");
 	test = Sprite("Res/Sprites/R.png");
 	link = Sprite("Res/Sprites/link.png");
@@ -181,6 +188,7 @@ void Game::Update()
 	CameraFollowObj(cameraState, link.GetPosition(), 5);
 
 	link.Draw();
+	mat1.Draw();
 
 }
 

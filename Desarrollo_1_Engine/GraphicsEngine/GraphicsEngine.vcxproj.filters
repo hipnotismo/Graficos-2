@@ -63,6 +63,12 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Material2D.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseGame.h">
@@ -116,6 +122,12 @@
     <ClInclude Include="Shader.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Material2D.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Res\Shaders\SpriteFragmentShader.shader">
@@ -128,6 +140,12 @@
       <Filter>Res\Shaders</Filter>
     </None>
     <None Include="..\Res\Shaders\SpriteVertexShader.shader">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="MaterialFragmentShader.shader">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="MaterialVertexShader.shader">
       <Filter>Res\Shaders</Filter>
     </None>
   </ItemGroup>
