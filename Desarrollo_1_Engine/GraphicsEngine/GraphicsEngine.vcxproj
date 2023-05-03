@@ -188,11 +188,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Res\Shaders\FragmentShader.shader" />
+    <None Include="..\Res\Shaders\MaterialVertexShader.shader" />
     <None Include="..\Res\Shaders\SpriteFragmentShader.shader" />
     <None Include="..\Res\Shaders\SpriteVertexShader.shader" />
     <None Include="..\Res\Shaders\VertexShader.shader" />
     <None Include="MaterialFragmentShader.shader" />
-    <None Include="MaterialVertexShader.shader" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

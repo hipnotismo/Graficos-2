@@ -145,7 +145,7 @@
     <None Include="MaterialFragmentShader.shader">
       <Filter>Res\Shaders</Filter>
     </None>
-    <None Include="MaterialVertexShader.shader">
+    <None Include="..\Res\Shaders\MaterialVertexShader.shader">
       <Filter>Res\Shaders</Filter>
     </None>
   </ItemGroup>

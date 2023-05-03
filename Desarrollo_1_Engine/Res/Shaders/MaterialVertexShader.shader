@@ -12,6 +12,7 @@ uniform mat4 proj;
 uniform mat4 view;
 void main() {
     gl_Position = proj * view * model * vec4(inPosition, 1.0);
-    outNormal = inNormal;
+    //outNormal = inNormal;
+    outNormal = mat3(transpose(inverse(model))) * inNormal;
     TexCoord = inTexCoord;
 }

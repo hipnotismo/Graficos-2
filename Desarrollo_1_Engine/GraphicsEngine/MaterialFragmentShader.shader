@@ -26,11 +26,19 @@ uniform Material material;
 
 void main() {
 
-    vec3 norm = normalize(outNormal);
+    //vec3 norm = normalize(outNormal);
+    vec3 lightPos = vec3(1.0, 1.0, 1.0);
 
     vec4 texColor = texture(texture0, TexCoord);
     if (texColor.a < 0.1) discard;
 
-    vec3 ambientResult = ambient.color * ambient.str;
-    gl_FragColor = texColor * vec4(ambientResult, 1.0);
+    vec3 norm = normalize(outNormal);
+
+
+    vec3 ambientResult = (ambient.color * material.ambient) * ambient.str;
+    //gl_FragColor = texColor * vec4(ambientResult,1.0);
+    gl_FragColor = material.color * vec4(ambientResult, 1.0);
+
+  /*  vec3 ambientResult = ambient.color * ambient.str;
+    gl_FragColor = texColor * vec4(ambientResult, 1.0);*/
 }

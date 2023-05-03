@@ -31,7 +31,7 @@ State linkState = Sdown;
 
 void Game::Start()
 {
-	Light::SetAmbientLight(1.0, 1.0, 1.0);
+	Light::SetAmbientLight(0.5, 1.0, 1.0);
 	Light::SetAmbientSrength(1.0);
 
 	/*shape.SetPosition(1.0f, 0.0f, 0.0f);
@@ -179,6 +179,7 @@ void Game::Update()
 	//link.Rotate(0, 0, a);
 	test.Draw();
 	padoru.Draw();
+
 	link.CheckCollisionAABB(padoru);
 	link.Update();
 
