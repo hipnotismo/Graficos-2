@@ -66,7 +66,7 @@
     <ClCompile Include="Light.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Material2D.cpp">
+    <ClCompile Include="Cube.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,7 +125,7 @@
     <ClInclude Include="Light.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Material2D.h">
+    <ClInclude Include="Cube.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
@@ -145,7 +145,7 @@
     <None Include="MaterialFragmentShader.shader">
       <Filter>Res\Shaders</Filter>
     </None>
-    <None Include="..\Res\Shaders\MaterialVertexShader.shader">
+    <None Include="MaterialVertexShader.shader">
       <Filter>Res\Shaders</Filter>
     </None>
   </ItemGroup>

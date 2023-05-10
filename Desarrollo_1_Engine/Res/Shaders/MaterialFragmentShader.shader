@@ -2,40 +2,52 @@
 
 in vec3 outNormal;
 in vec2 TexCoord;
-
-out vec4 outColor;
-out vec2 TexCoord;
+in vec3 fragPos;
 uniform sampler2D texture0;
-//uniform sampler2D texture2;
 
-struct Light
+struct Ambient
 {
-	vec3 ambient;
+    vec3 color;
+    float str;
 };
 
-uniform Light light;
+uniform Ambient ambient;
 
 struct Material
 {
-	vec4 color;
-	vec3 ambient;
-	vec3 diffuse;
-	vec3 specular;
-	float shininess;
+    vec4 color;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
 };
 uniform Material material;
 
-void main() {
-	vec3 norm = normalize(OutNormal);
+vec4 CalDiffuseColor(vec3 _lightPos, vec3 _fragPos, vec3 _norm, vec3 _lightColor, vec3 _ambientResult);
 
-	vec3 norm = normalize(outNormal);
+void main()
+{
+    vec3 lightPos = vec3(0.0f, 1.0f, 10.0f);
+    vec3 lightColor = vec3(0.0, 1.0, 1.0); //if u change the blue color to zero then u dont see the diffuse
+    vec4 texColor = texture(texture0, TexCoord);
+    //if(texColor.a < 0.1) discard;
+    vec3 norm = normalize(outNormal);
 
-	vec4 texColor = texture(texture0, TexCoord);
-	vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
-	if (texColor.a < 0.1) //when escuchas algo en discord y funciona :D
-		discard;
-	//vec4 light = vec4(1.0, 0.5, 0.31,1.0);
-	gl_FragColor = texColor * vec4(light.ambient, 1.0);
-	// linearly interpolate between both textures (80% container, 20% awesomeface)
-	//mix(texture(texture1, TexCoord),texture(texture2, TexCoord),0.2);
+
+    vec3 ambientResult = (ambient.color * material.ambient) * ambient.str;
+    //gl_FragColor = texColor * vec4(ambientResult,1.0);
+    //gl_FragColor = material.color * vec4(ambientResult,1.0);
+    gl_FragColor = CalDiffuseColor(lightPos, fragPos, norm, lightColor, ambientResult);
+
+}
+//_norm need be normalized before
+vec4 CalDiffuseColor(vec3 _lightPos, vec3 _fragPos, vec3 _norm, vec3 _lightColor, vec3 _ambientResult)
+{
+    vec3 _lightDir = normalize(_lightPos - _fragPos);
+
+    float _diff = max(dot(_norm, _lightDir), 0.0);
+    vec3 _diffuse = _diff * _lightColor;
+    return vec4((_ambientResult + _diffuse), 1.0) * material.color;
+
+
 }

@@ -14,7 +14,6 @@ public:
 	static glm::float32 GetAmbientStrength();
 	static glm::vec3 ambient;
 	static float ambientStrength;
-
 private:
 
 };

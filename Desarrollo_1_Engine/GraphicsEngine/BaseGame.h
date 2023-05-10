@@ -6,7 +6,8 @@
 #include "Sprite.h"
 #include "Export.h"
 #include "Input.h"
-#include "Material2D.h"
+#include "Cube.h"
+#include "Light.h"
 
 struct GLFWmonitor;
 struct GLFWwindow;

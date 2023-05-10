@@ -12,8 +12,8 @@ Game::Game()
 	rightAnim = nullptr;
 	upAnim = nullptr;
 	idleUpAnim = nullptr;
-	/*shape = Shape(ShapeType::Triangle);
-	squareAuto = Shape(ShapeType::Square);*/
+	shape = Shape(ShapeType::Triangle);
+	squareAuto = Shape(ShapeType::Square);
 
 }
 
@@ -31,15 +31,16 @@ State linkState = Sdown;
 
 void Game::Start()
 {
-	Light::SetAmbientLight(0.5, 1.0, 1.0);
+	Light::SetAmbientLight(0.5, 0.5, 0.31);
+	//Light::SetAmbientLight(0.0, 0.0,1.0);
 	Light::SetAmbientSrength(1.0);
 
-	/*shape.SetPosition(1.0f, 0.0f, 0.0f);
-	squareAuto.SetPosition(1.0f, 0.0f, 0.0f);*/
-	mat1 = Material2D("Res/Sprites/padoru.png");
+	mat1 = Cube("Res/Sprites/padoru.png");
 	mat1.SetPosition(0.0f, 1.0f, 2.0f);
 	mat1.Scale(1.0f, 1.0f, 1.0f);
 
+	shape.SetPosition(1.0f, 0.0f, 0.0f);
+	squareAuto.SetPosition(1.0f, 0.0f, 0.0f);
 	padoru = Sprite("Res/Sprites/padoru.png");
 	test = Sprite("Res/Sprites/R.png");
 	link = Sprite("Res/Sprites/link.png");
@@ -93,12 +94,13 @@ void Game::Update()
 	////shape.Rotate(0, 0, a);
 	///*shape.Scale(0.1 + a, 1, 1);
 	//shape.SetPosition(-1 + a, 0, 0);
-	//squareAuto.Draw();*/
-
+	squareAuto.Draw();
+	testX = testX - 1;
+	mat1.Rotate(0, testX ,0);
 	//squareAuto.Rotate(0.0f, 0.0f, 0.0f + a);
 
 	//squareAuto.Draw();
-	//shape.Draw();
+	shape.Draw();
 
 	if (GetKey(KEYCODE_X)) {
 		padoru.Rotate(0.0f, 0.0f, 500.0f);
@@ -179,7 +181,6 @@ void Game::Update()
 	//link.Rotate(0, 0, a);
 	test.Draw();
 	padoru.Draw();
-
 	link.CheckCollisionAABB(padoru);
 	link.Update();
 
